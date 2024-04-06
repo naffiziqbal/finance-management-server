@@ -1,18 +1,18 @@
+import app from "./app/app";
 import mongoose from 'mongoose';
-import { config } from './config';
-import app from './app/app';
+import { config } from "./config";
 
 main().catch(err => console.log(err));
-const port = config.port;
 
+const port = config.port
 async function main() {
     try {
         await mongoose.connect(config.db_url as string);
-        app.use((req, res) => {
-            res.send("Server is running")
-        });
-        app.listen(port, () => `Server is running on port ${port}`);
-        console.log('Connected to database🖥🖥🖥🖥🖥')
+        app.listen(port, () => `Server Is Listening on ${port}`)
+        console.log(`Server Is Listening on ${port}`)
+
+    } catch (error) {
+        console.log(error)
     }
-    catch (err) { console.log(err); }
+
 }
