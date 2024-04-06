@@ -55,4 +55,22 @@ const userAuthentication: RequestHandler = async (req, res) => {
     }
 }
 
-export const UserController = { createUser, userLogin, userAuthentication }
+const updateUser: RequestHandler = async (req, res) => {
+    const { id } = req.params;
+    const { email, password, displayName, photoURL } = req.body;
+    try {
+        const user = await UserService.updateUser(id, { email, password, displayName, photoURL });
+        res.status(200).json({
+            success: true,
+            user,
+            message: "User Updated",
+        });
+    } catch (error: any) {
+        res.status(400).json({
+            success: false,
+            message: error.message,
+        })
+    }
+}
+
+export const UserController = { createUser, userLogin, userAuthentication, updateUser }

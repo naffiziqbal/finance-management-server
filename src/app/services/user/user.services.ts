@@ -34,9 +34,23 @@ const userLogin = async ({ email, password }: IUserLogin) => {
 }
 
 const userAuthentication = async (id: string) => {
+    //* Finding user by id
     const user = await User.findById({ _id: id });
     if (!user) throw new Error("User Not Found")
     return user;
+}
+
+
+const updateUser = async (id: string, { email, password, displayName, photoURL }: IUser) => {
+    //* Finding user by id
+    const user = await User.findById({ _id: id });
+    if (!user) throw new Error("User Not Found")
+    //* Update user
+    const updatedUser = await User.findByIdAndUpdate({ _id: id }, { email, password, displayName, photoURL }, { new: true });
+    console.log(updatedUser)
+    if (updatedUser) return updatedUser;
 
 }
-export const UserService = { createUser, userLogin, userAuthentication }
+
+
+export const UserService = { createUser, userLogin, userAuthentication, updateUser }
