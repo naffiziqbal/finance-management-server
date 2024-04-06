@@ -29,8 +29,14 @@ const userLogin = async ({ email, password }: IUserLogin) => {
     const isMatch = await bcryptjs.compare(password, user.password)
     if (!isMatch) throw new Error("Invalid Credentials")
     //* Create token
-    const token = jwt.sign({ uid: user._id }, config.user_secret as string, { expiresIn: "1h" })
+    const token = jwt.sign({ uid: user._id }, config.user_secret as string, { expiresIn: "1hr" })
     return { user, token }
 }
 
-export const UserService = { createUser, userLogin }
+const userAuthentication = async (id: string) => {
+    const user = await User.findById({ _id: id });
+    if (!user) throw new Error("User Not Found")
+    return user;
+
+}
+export const UserService = { createUser, userLogin, userAuthentication }

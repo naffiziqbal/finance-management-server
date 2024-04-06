@@ -38,4 +38,21 @@ const userLogin: RequestHandler = async (req, res) => {
     }
 }
 
-export const UserController = { createUser, userLogin }
+const userAuthentication: RequestHandler = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const user = await UserService.userAuthentication(id);
+        res.status(200).json({
+            success: true,
+            user,
+            message: "User Found",
+        });
+    } catch (error: any) {
+        res.status(400).json({
+            success: false,
+            message: error.message,
+        })
+    }
+}
+
+export const UserController = { createUser, userLogin, userAuthentication }
