@@ -37,11 +37,14 @@ const deleteService = async (id: string) => {
     return services;
 }
 
-const getTotalIncome = async () => {
+const getTotalIncome = async (time: any) => {
     const services = await Service.aggregate([
         {
             $match: {
-                type: "income"
+                type: "income",
+                createdAt: {
+                    $gte: new Date(new Date().setDate(new Date().getDate() - parseInt(time)))
+                }
             }
         },
         {
@@ -59,5 +62,30 @@ const getTotalIncome = async () => {
     return services;
 }
 
+const getTotalExpenses = async (time: string) => {
+    const services = await Service.aggregate([
+        {
+            $match: {
+                type: "expenses",
+                createdAt: {
+                    $gte: new Date(new Date().setDate(new Date().getDate() - parseInt(time)))
+                }
+            }
+        },
+        {
+            $group: {
+                _id: null,
+                totalExpenses: { $sum: "$amount" }
+            }
+        }
+    ]);
 
-export const servicesService = { createService, getServices, updateService, deleteService, getTotalIncome }
+    if (!services.length) {
+        throw new Error("No services found");
+    }
+
+    return services;
+}
+
+
+export const servicesService = { createService, getServices, updateService, deleteService, getTotalIncome, getTotalExpenses}

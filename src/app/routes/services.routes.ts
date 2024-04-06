@@ -8,6 +8,7 @@ serviceRoutes.get("/services", servicesController.getServices)
 serviceRoutes.patch("/update/:id", servicesController.updateService)
 serviceRoutes.delete("/delete/:id", servicesController.deleteService)
 serviceRoutes.get("/total-income", servicesController.getTotalIncome)
+serviceRoutes.get("/total-expenses", servicesController.getTotalExpenses)
 
 
 

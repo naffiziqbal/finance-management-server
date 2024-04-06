@@ -83,8 +83,9 @@ const deleteService: RequestHandler = async (req, res) => {
 }
 
 const getTotalIncome: RequestHandler = async (req, res) => {
+    const { time } = req.query;
     try {
-        const services = await servicesService.getTotalIncome();
+        const services = await servicesService.getTotalIncome(time);
         res.status(200).json({
             success: true,
             services,
@@ -99,4 +100,22 @@ const getTotalIncome: RequestHandler = async (req, res) => {
     }
 }
 
-export const servicesController = { createServices, getServices, updateService, deleteService, getTotalIncome }
+const getTotalExpenses: RequestHandler = async (req, res) => {
+    const { time } = req.query;
+    try {
+        const services = await servicesService.getTotalExpenses(time as string);
+        res.status(200).json({
+            success: true,
+            services,
+            message: "Total Expenses fetched successfully",
+        });
+    }
+    catch (error: any) {
+        res.status(400).json({
+            success: false,
+            message: error.message
+        });
+    }
+}
+
+export const servicesController = { createServices, getServices, updateService, deleteService, getTotalIncome, getTotalExpenses }
