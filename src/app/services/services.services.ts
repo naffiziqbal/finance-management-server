@@ -37,5 +37,27 @@ const deleteService = async (id: string) => {
     return services;
 }
 
+const getTotalIncome = async () => {
+    const services = await Service.aggregate([
+        {
+            $match: {
+                type: "income"
+            }
+        },
+        {
+            $group: {
+                _id: null,
+                totalIncome: { $sum: "$amount" }
+            }
+        }
+    ]);
 
-export const servicesService = { createService, getServices, updateService, deleteService }
+    if (!services.length) {
+        throw new Error("No services found");
+    }
+
+    return services;
+}
+
+
+export const servicesService = { createService, getServices, updateService, deleteService, getTotalIncome }

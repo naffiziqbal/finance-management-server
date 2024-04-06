@@ -81,4 +81,22 @@ const deleteService: RequestHandler = async (req, res) => {
         });
     }
 }
-export const servicesController = { createServices, getServices, updateService, deleteService }
+
+const getTotalIncome: RequestHandler = async (req, res) => {
+    try {
+        const services = await servicesService.getTotalIncome();
+        res.status(200).json({
+            success: true,
+            services,
+            message: "Total Income fetched successfully",
+        });
+    }
+    catch (error: any) {
+        res.status(400).json({
+            success: false,
+            message: error.message
+        });
+    }
+}
+
+export const servicesController = { createServices, getServices, updateService, deleteService, getTotalIncome }

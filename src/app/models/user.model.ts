@@ -7,7 +7,7 @@ const userSchema = new Schema<IUser>({
     password: { type: String, required: true },
     displayName: { type: String, required: true },
     photoURL: { type: String, required: true }
-})
+}, { timestamps: true })
 
 userSchema.pre("save", async function (next) {
     try {
