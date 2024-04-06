@@ -1,0 +1,24 @@
+{
+  "name": "finance-management",
+  "version": "1.0.0",
+  "description": "A finance  management web applicaiton to  handle income expenses and manage personal financial state",
+  "main": "server.js",
+  "author": "Nafiz Iqbal",
+  "license": "MIT",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongodb": "^6.5.0",
+    "mongoose": "^8.3.0",
+    "typescript": "^5.4.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.5",
+    "ts-node-dev": "^2.0.0"
+  }
+}
