@@ -6,6 +6,7 @@ const serviceRoutes = Router()
 serviceRoutes.post("/create-service", servicesController.createServices)
 serviceRoutes.get("/services", servicesController.getServices)
 serviceRoutes.patch("/update/:id", servicesController.updateService)
+serviceRoutes.delete("/delete/:id", servicesController.deleteService)
 
 
 

@@ -63,4 +63,22 @@ const updateService: RequestHandler = async (req, res) => {
     }
 
 }
-export const servicesController = { createServices, getServices, updateService }
+
+const deleteService: RequestHandler = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const services = await servicesService.deleteService(id);
+        res.status(200).json({
+            success: true,
+            services,
+            message: "Service Deleted Successfully",
+        });
+    }
+    catch (error: any) {
+        res.status(400).json({
+            success: false,
+            message: error.message
+        });
+    }
+}
+export const servicesController = { createServices, getServices, updateService, deleteService }

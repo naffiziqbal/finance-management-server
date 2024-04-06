@@ -29,5 +29,13 @@ const updateService = async (id: string, { name, amount, category, description, 
 
 }
 
+const deleteService = async (id: string) => {
+    const services = await Service.findByIdAndDelete(id);
+    if (!services) {
+        throw new Error("Service not deleted");
+    }
+    return services;
+}
 
-export const servicesService = { createService, getServices, updateService }
+
+export const servicesService = { createService, getServices, updateService, deleteService }
