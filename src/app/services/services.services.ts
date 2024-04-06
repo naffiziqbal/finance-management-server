@@ -15,10 +15,19 @@ const getServices = async (type: any) => {
     if (!services.length) {
         throw new Error("No services found");
     }
-    
+
     return services;
 }
 
 
+const updateService = async (id: string, { name, amount, category, description, type }: IService) => {
+    const services = await Service.findByIdAndUpdate(id, { name, amount, category, description, type }, { new: true });
+    if (!services) {
+        throw new Error("Service not updated");
+    }
+    return services;
 
-export const servicesService = { createService, getServices }
+}
+
+
+export const servicesService = { createService, getServices, updateService }

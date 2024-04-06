@@ -16,7 +16,10 @@ const createServices: RequestHandler = async (req, res) => {
         });
     }
     catch (error: any) {
-        res.status(400).send(error.message);
+        res.status(400).json({
+            success: false,
+            message: error.message
+        });
     }
 
 }
@@ -33,7 +36,31 @@ const getServices: RequestHandler = async (req, res) => {
         });
     }
     catch (error: any) {
-        res.status(400).send(error.message);
+        res.status(400).json(
+            {
+                success: false,
+                message: error.message
+            }
+        );
     }
 }
-export const servicesController = { createServices, getServices }
+const updateService: RequestHandler = async (req, res) => {
+    const { id } = req.params;
+    const { name, amount, category, description, type }: IService = req.body;
+    try {
+        const services = await servicesService.updateService(id, { name, description, amount, category, type });
+        res.status(200).json({
+            success: true,
+            services,
+            message: "Service Updated Successfully",
+        });
+    }
+    catch (error: any) {
+        res.status(400).json({
+            success: false,
+            message: error.message
+        });
+    }
+
+}
+export const servicesController = { createServices, getServices, updateService }
