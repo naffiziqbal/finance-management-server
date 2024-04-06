@@ -1,5 +1,5 @@
 import { Request, RequestHandler } from "express";
-import { UserService } from "../../services/user/user.services";
+import { UserService } from "../services/user.services";
 
 const createUser: RequestHandler = async (req, res) => {
     const { email, password, displayName, photoURL } = req.body;

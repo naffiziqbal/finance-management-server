@@ -1,6 +1,6 @@
-import { config } from "../../../config";
-import User from "../../models/user/user.model";
-import { IUser, IUserLogin } from "../../types/user.interface";
+import { config } from "../../config";
+import User from "../models/user.model";
+import { IUser, IUserLogin } from "../types/user.interface";
 import jwt from "jsonwebtoken";
 import bcryptjs from "bcryptjs";
 
@@ -47,7 +47,6 @@ const updateUser = async (id: string, { email, password, displayName, photoURL }
     if (!user) throw new Error("User Not Found")
     //* Update user
     const updatedUser = await User.findByIdAndUpdate({ _id: id }, { email, password, displayName, photoURL }, { new: true });
-    console.log(updatedUser)
     if (updatedUser) return updatedUser;
 
 }
