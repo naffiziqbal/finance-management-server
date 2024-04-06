@@ -10,6 +10,15 @@ const createService = async ({ name, amount, category, description, type }: ISer
 
 }
 
+const getServices = async (type: any) => {
+    const services = await Service.find({ type: type });
+    if (!services.length) {
+        throw new Error("No services found");
+    }
+    
+    return services;
+}
 
 
-export const servicesService = { createService }
+
+export const servicesService = { createService, getServices }

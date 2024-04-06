@@ -2,7 +2,7 @@ export interface IService {
     name: string;
     category: string;
     description: string;
-    type: "income" | "expense";
+    type: "income" | "expenses";
     amount: number;
 }
 
