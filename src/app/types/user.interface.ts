@@ -4,3 +4,9 @@ export interface IUser {
     displayName: string;
     photoURL: string;
 }
+
+
+export interface IUserLogin {
+    email: string;
+    password: string;
+}

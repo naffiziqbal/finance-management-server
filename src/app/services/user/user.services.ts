@@ -1,7 +1,8 @@
 import { config } from "../../../config";
 import User from "../../models/user/user.model";
-import { IUser } from "../../types/user.interface";
+import { IUser, IUserLogin } from "../../types/user.interface";
 import jwt from "jsonwebtoken";
+import bcryptjs from "bcryptjs";
 
 const createUser = async ({ email, password, displayName, photoURL }: IUser) => {
     //* Check if user already exists
@@ -20,4 +21,16 @@ const createUser = async ({ email, password, displayName, photoURL }: IUser) => 
 }
 
 
-export const UserService = { createUser }
+const userLogin = async ({ email, password }: IUserLogin) => {
+    //* Check if user exists
+    const user = await User.findOne({ email })
+    if (!user) throw new Error("User Not Found")
+    //* Check if password is correct
+    const isMatch = await bcryptjs.compare(password, user.password)
+    if (!isMatch) throw new Error("Invalid Credentials")
+    //* Create token
+    const token = jwt.sign({ uid: user._id }, config.user_secret as string, { expiresIn: "1h" })
+    return { user, token }
+}
+
+export const UserService = { createUser, userLogin }

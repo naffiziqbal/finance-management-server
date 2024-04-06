@@ -5,7 +5,6 @@ const createUser: RequestHandler = async (req, res) => {
     const { email, password, displayName, photoURL } = req.body;
     try {
         const { user, token } = await UserService.createUser({ email, password, displayName, photoURL });
-        console.log(user, token)
         res.status(201).json({
             success: true,
             user,
@@ -13,7 +12,7 @@ const createUser: RequestHandler = async (req, res) => {
             token
         });
     } catch (error: any) {
-        console.log(error)
+        // console.log(error)
         res.status(400).json({
             success: false,
             message: error.message,
@@ -21,5 +20,22 @@ const createUser: RequestHandler = async (req, res) => {
     }
 }
 
+const userLogin: RequestHandler = async (req, res) => {
+    const { email, password } = req.body;
+    try {
+        const { user, token } = await UserService.userLogin({ email, password });
+        res.status(200).json({
+            success: true,
+            user,
+            message: "User Logged In Successfully",
+            token
+        });
+    } catch (error: any) {
+        res.status(400).json({
+            success: false,
+            message: error.message,
+        })
+    }
+}
 
-export const UserController = { createUser }
+export const UserController = { createUser, userLogin }
