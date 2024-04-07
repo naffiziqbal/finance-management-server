@@ -88,4 +88,4 @@ const getTotalExpenses = async (time: string) => {
 }
 
 
-export const servicesService = { createService, getServices, updateService, deleteService, getTotalIncome, getTotalExpenses}
+export const servicesService = { createService, getServices, updateService, deleteService, getTotalIncome, getTotalExpenses }
