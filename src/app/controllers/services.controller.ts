@@ -28,7 +28,7 @@ const getServices: RequestHandler = async (req, res) => {
     const { type } = req.query;
     try {
         const services = await servicesService.getServices(type as string);
-        res.setHeader('cache-control', 'public, max-age=60000');
+       // res.setHeader('cache-control', 'public, max-age=60000');
         res.status(200).json({
             success: true,
             services,
