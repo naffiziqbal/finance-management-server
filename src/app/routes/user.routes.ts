@@ -10,4 +10,9 @@ userRoutes.post("/:id", verifyJwt, UserController.userAuthentication)
 userRoutes.patch("/update/:id", UserController.updateUser)
 
 
+
+
+
+
 export default userRoutes
+

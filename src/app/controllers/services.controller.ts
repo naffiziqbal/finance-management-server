@@ -1,14 +1,15 @@
 import { RequestHandler } from "express";
 import { servicesService } from "../services/services.services";
 import { IService } from "../types/services.interface";
+import { Service } from "../models/services.model";
 
 const createServices: RequestHandler = async (req, res) => {
 
-    const { name, amount, category, description, type }: IService = req.body;
+    const { name, amount, category, description, type, creatorId }: IService = req.body;
     category.toLowerCase();
     type.toLowerCase();
     try {
-        const services = await servicesService.createService({ name, description, amount, category, type });
+        const services = await servicesService.createService({ name, creatorId, description, amount, category, type });
         res.status(201).json({
             success: true,
             services,
@@ -26,9 +27,9 @@ const createServices: RequestHandler = async (req, res) => {
 
 const getServices: RequestHandler = async (req, res) => {
     const { type } = req.query;
+    const { id } = req.params;
     try {
-        const services = await servicesService.getServices(type as string);
-       // res.setHeader('cache-control', 'public, max-age=60000');
+        const services = await servicesService.getServices(type as string, id as string);
         res.status(200).json({
             success: true,
             services,
@@ -84,8 +85,9 @@ const deleteService: RequestHandler = async (req, res) => {
 
 const getTotalIncome: RequestHandler = async (req, res) => {
     const { time } = req.query;
+    const { id } = req.params;
     try {
-        const services = await servicesService.getTotalIncome(time);
+        const services = await servicesService.getTotalIncome(time as string, id as string);
         res.status(200).json({
             success: true,
             services,
@@ -102,8 +104,9 @@ const getTotalIncome: RequestHandler = async (req, res) => {
 
 const getTotalExpenses: RequestHandler = async (req, res) => {
     const { time } = req.query;
+    const { id } = req.params;
     try {
-        const services = await servicesService.getTotalExpenses(time as string);
+        const services = await servicesService.getTotalExpenses(time as string, id as string);
         res.status(200).json({
             success: true,
             services,
@@ -118,4 +121,63 @@ const getTotalExpenses: RequestHandler = async (req, res) => {
     }
 }
 
-export const servicesController = { createServices, getServices, updateService, deleteService, getTotalIncome, getTotalExpenses }
+
+
+const getCategoryWiseAmount = async (req: any, res: any) => {
+    const { type, time } = req.query;
+    const { id } = req.params;
+    try {
+        const services = await servicesService.getCategoryWiseAmount(type as string, id as string, time);
+        res.status(200).json({
+            success: true,
+            services,
+            message: "Category wise amount fetched successfully",
+        });
+    }
+    catch (error: any) {
+        res.status(400).json({
+            success: false,
+            message: error.message
+        });
+    }
+}
+
+const getCategoryData = async (req: any, res: any) => {
+    const { type, category } = req.query;
+    const { id } = req.params;
+    try {
+        const services = await servicesService.getCategoryData(type as string, category as string, id as string);
+        res.status(200).json({
+            success: true,
+            services,
+            message: "Category data fetched successfully",
+        });
+    }
+    catch (error: any) {
+        res.status(400).json({
+            success: false,
+            message: error.message
+        });
+    }
+}
+
+
+
+//! DANGEROUS AREA ===================================
+const dropDatabase: RequestHandler = async (req, res) => {
+    try {
+        const service = await Service.deleteMany({});
+        res.status(200).json({
+            success: true,
+            service,
+            message: "Database Dropped Successfully",
+        });
+    }
+    catch (error: any) {
+        res.status(400).json({
+            success: false,
+            message: error.message
+        });
+    }
+}
+export const servicesController = { createServices, getServices, updateService, deleteService, getTotalIncome, getTotalExpenses, dropDatabase, getCategoryWiseAmount, getCategoryData }

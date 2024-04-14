@@ -1,8 +1,8 @@
 import { Service } from "../models/services.model";
 import { IService } from "../types/services.interface";
 
-const createService = async ({ name, amount, category, description, type }: IService) => {
-    const services = await Service.create({ name, amount, category, description, type });
+const createService = async ({ name, amount, category, description, type, creatorId }: IService) => {
+    const services = await Service.create({ name, amount, category, description, type, creatorId });
     if (!services._id) {
         throw new Error("Service not created");
     }
@@ -10,8 +10,11 @@ const createService = async ({ name, amount, category, description, type }: ISer
 
 }
 
-const getServices = async (type: any) => {
-    const services = await Service.find({ type: type });
+
+// Get Service by type i:e income or expenses
+const getServices = async (type: any, creatorId: string) => {
+    const services = await Service.find({ type, creatorId });
+
     if (!services.length) {
         throw new Error("No services found");
     }
@@ -37,11 +40,12 @@ const deleteService = async (id: string) => {
     return services;
 }
 
-const getTotalIncome = async (time: any) => {
+const getTotalIncome = async (time: any, id: string) => {
     const services = await Service.aggregate([
         {
             $match: {
                 type: "income",
+                creatorId: id,
                 createdAt: {
                     $gte: new Date(new Date().setDate(new Date().getDate() - parseInt(time)))
                 }
@@ -62,11 +66,12 @@ const getTotalIncome = async (time: any) => {
     return services;
 }
 
-const getTotalExpenses = async (time: string) => {
+const getTotalExpenses = async (time: string, id: string) => {
     const services = await Service.aggregate([
         {
             $match: {
                 type: "expenses",
+                creatorId: id,
                 createdAt: {
                     $gte: new Date(new Date().setDate(new Date().getDate() - parseInt(time)))
                 }
@@ -87,5 +92,41 @@ const getTotalExpenses = async (time: string) => {
     return services;
 }
 
+// Getting category wise amount
+const getCategoryWiseAmount = async (type: string, id: string, time: any) => {
+    const services = await Service.aggregate([
+        {
+            $match: {
+                type: type,
+                creatorId: id,
+                createdAt: {
+                    $gte: new Date(new Date().setDate(new Date().getDate() - parseInt(time)))
+                }
+            }
+        },
+        {
+            $group: {
+                _id: "$category",
+                totalAmount: { $sum: "$amount" }
+            }
+        }
+    ]);
 
-export const servicesService = { createService, getServices, updateService, deleteService, getTotalIncome, getTotalExpenses }
+    if (!services.length) {
+        throw new Error("No services found");
+    }
+
+    return services;
+}
+
+// Get Category data
+const getCategoryData = async (type: string, category: string, id: string) => {
+    const services = await Service.find({ type: type, category: category, creatorId: id });
+    if (!services.length) {
+        throw new Error("No services found");
+    }
+    return services;
+
+}
+
+export const servicesService = { createService, getServices, updateService, deleteService, getTotalIncome, getTotalExpenses, getCategoryWiseAmount, getCategoryData }
