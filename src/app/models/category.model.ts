@@ -7,6 +7,10 @@ const categorySchema = new Schema<ICategory>(
       type: String,
       required: true,
     },
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
   },
   { timestamps: true }
 );
